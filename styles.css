@@ -109,8 +109,29 @@ main {
   font-size: 14px;
 }
 
-.pdf-link a {
+.download-button {
+  border: 1px solid var(--navy);
+  border-radius: 999px;
+  background: white;
   color: var(--navy);
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 22px;
+  cursor: pointer;
+}
+
+.download-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.coverage table {
+  min-width: 420px;
+}
+
+.total-row td {
+  font-weight: 700;
+  background: var(--header);
 }
 
 .collected {
@@ -313,6 +334,7 @@ select {
   .topbar,
   .banner,
   .sign-button,
+  .download-button,
   .pdf-link,
   dialog {
     display: none !important;

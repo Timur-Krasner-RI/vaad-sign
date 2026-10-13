@@ -28,10 +28,9 @@
       </p>
 
       <article class="paper">
-        <img src="page-1.png" alt="עמוד 1 של אישור בעלי הדירות" />
-        <img src="page-2.png" alt="עמוד 2 של טבלת החתימות" />
+        <img src="page-1.png" alt="אישור בעלי הדירות" />
         <p class="pdf-link">
-          <a href="document.pdf" target="_blank" rel="noopener">המסמך המקורי (PDF)</a>
+          <button type="button" class="download-button" data-download-pdf>הורדת PDF</button>
         </p>
       </article>
 
@@ -39,6 +38,7 @@
         <div class="collected-head">
           <h2 id="collected-title">חתימות שנאספו</h2>
           <p id="sign-count" class="count">טוען…</p>
+          <button type="button" class="download-button" data-download-pdf>הורדת PDF</button>
           <button type="button" class="sign-button" data-open-sign>לחתום</button>
         </div>
         <p id="load-error" class="form-error" hidden></p>
@@ -55,6 +55,22 @@
               </tr>
             </thead>
             <tbody id="sign-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="collected coverage" aria-labelledby="coverage-title">
+        <h2 id="coverage-title">דירות שחתמו</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>מספר בניין</th>
+                <th>דירות שחתמו</th>
+                <th>כמות</th>
+              </tr>
+            </thead>
+            <tbody id="coverage-rows"></tbody>
           </table>
         </div>
       </section>
@@ -78,13 +94,9 @@
             <select name="building" required>
               <option value="">בחרו בניין</option>
               <option>1</option>
-              <option>2</option>
               <option>3</option>
-              <option>4</option>
               <option>5</option>
-              <option>6</option>
               <option>7</option>
-              <option>8</option>
               <option>9</option>
             </select>
           </label>
@@ -125,6 +137,7 @@
       </form>
     </dialog>
 
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
     <script src="config.js"></script>
     <script src="app.js"></script>
   </body>

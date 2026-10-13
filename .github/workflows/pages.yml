@@ -47,8 +47,6 @@ jobs:
               "app.js",
               "styles.css",
               "page-1.png",
-              "page-2.png",
-              "document.pdf",
           ):
               shutil.copy(root / name, site / name)
           config = {
