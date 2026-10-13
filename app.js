@@ -61,17 +61,27 @@ function decodeContent(b64) {
   return new TextDecoder().decode(bytes);
 }
 
+async function githubError(response) {
+  let detail = "";
+  try {
+    const data = await response.json();
+    detail = data.message || "";
+  } catch (error) {
+    detail = "";
+  }
+  const failure = new Error("github");
+  failure.status = response.status;
+  failure.detail = detail;
+  return failure;
+}
+
 async function loadRecord() {
   const response = await fetch(contentsUrl(true), {
     headers: apiHeaders(),
     cache: "no-store",
   });
   if (response.status === 404) return { sha: null, items: [] };
-  if (!response.ok) {
-    const error = new Error("load");
-    error.status = response.status;
-    throw error;
-  }
+  if (!response.ok) throw await githubError(response);
   const data = await response.json();
   const items = JSON.parse(decodeContent(data.content));
   if (!Array.isArray(items)) throw new Error("format");
@@ -113,9 +123,7 @@ async function saveRecord(record) {
       lastError = new Error("conflict");
       continue;
     }
-    const error = new Error("save");
-    error.status = response.status;
-    throw error;
+    throw await githubError(response);
   }
   throw lastError || new Error("conflict");
 }
@@ -322,7 +330,9 @@ function errorMessage(error) {
   if (!config.token) return "שמירת החתימות עדיין לא הופעלה.";
   if (error.code === "duplicate") return "לדירה הזו כבר נשמרה חתימה.";
   if (error.status === 401) return "מפתח הגישה לא תקין.";
-  if (error.status === 403) return "למפתח אין הרשאה לכתוב לריפו.";
+  if (error.status === 403) {
+    return "למפתח אין הרשאת כתיבה. פתחו את הטוקן, בחרו רק את vaad-sign, ושנו את Contents ל-Read and write. אם מחרוזת הטוקן לא השתנתה, אין צורך לפרסם מחדש.";
+  }
   return "השמירה נכשלה. נסו שוב.";
 }
 
