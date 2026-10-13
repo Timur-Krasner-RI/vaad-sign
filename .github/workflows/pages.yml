@@ -1,0 +1,73 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - signatures.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build site
+        env:
+          SIGN_TOKEN: ${{ secrets.SIGN_TOKEN }}
+        run: |
+          python3 - << 'PY'
+          import json, os, shutil
+          from pathlib import Path
+
+          root = Path(".")
+          site = Path("_site")
+          if site.exists():
+              shutil.rmtree(site)
+          site.mkdir()
+          for name in (
+              "index.html",
+              "app.js",
+              "styles.css",
+              "page-1.png",
+              "page-2.png",
+              "document.pdf",
+          ):
+              shutil.copy(root / name, site / name)
+          config = {
+              "owner": "Timur-Krasner-RI",
+              "repo": "vaad-sign",
+              "branch": "main",
+              "token": os.environ.get("SIGN_TOKEN", ""),
+          }
+          (site / "config.js").write_text(
+              "window.SIGN_CONFIG = " + json.dumps(config, ensure_ascii=False) + ";\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

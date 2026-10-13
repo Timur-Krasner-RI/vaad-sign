@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>אישור דיירים — הסמכת מורשה חתימה</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-text">
+        <p class="eyebrow">ועד הבית · נחום גולדמן 1–9, באר שבע</p>
+        <h1>אישור דיירים</h1>
+      </div>
+      <button type="button" class="sign-button" data-open-sign>לחתום</button>
+    </header>
+
+    <main>
+      <p id="setup-banner" class="banner" hidden>
+        שמירת חתימות עדיין לא הופעלה. צריך להוסיף את הסוד SIGN_TOKEN ולהריץ את פעולת Deploy site.
+      </p>
+
+      <article class="paper">
+        <img src="page-1.png" alt="עמוד 1 של אישור בעלי הדירות" />
+        <img src="page-2.png" alt="עמוד 2 של טבלת החתימות" />
+        <p class="pdf-link">
+          <a href="document.pdf" target="_blank" rel="noopener">המסמך המקורי (PDF)</a>
+        </p>
+      </article>
+
+      <section class="collected" aria-labelledby="collected-title">
+        <div class="collected-head">
+          <h2 id="collected-title">חתימות שנאספו</h2>
+          <p id="sign-count" class="count">טוען…</p>
+          <button type="button" class="sign-button" data-open-sign>לחתום</button>
+        </div>
+        <p id="load-error" class="form-error" hidden></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>מס'</th>
+                <th>מספר בניין</th>
+                <th>מספר דירה</th>
+                <th>שם מלא</th>
+                <th>תאריך</th>
+                <th>חתימה</th>
+              </tr>
+            </thead>
+            <tbody id="sign-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="sign-dialog">
+      <form id="sign-form">
+        <header class="dialog-head">
+          <h2>חתימה על האישור</h2>
+          <button type="button" class="text-button" data-close-sign>סגירה</button>
+        </header>
+
+        <p class="dialog-lead">
+          אנו, בעלי הדירות במתחם נחום גולדמן 1–9, באר שבע, מאשרים את מינויה של
+          קארין יורצ'נקו כמורשת חתימה יחידה ומלאה בחשבון הבנק של ועד הבית.
+        </p>
+
+        <div class="fields">
+          <label>
+            מספר בניין
+            <select name="building" required>
+              <option value="">בחרו בניין</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+            </select>
+          </label>
+          <label>
+            מספר דירה
+            <input name="apartment" required inputmode="numeric" maxlength="6" placeholder="12" />
+          </label>
+          <label class="full">
+            שם מלא
+            <input name="name" required maxlength="80" autocomplete="name" placeholder="שם פרטי ושם משפחה" />
+          </label>
+          <label class="full">
+            תאריך
+            <input name="date" type="date" required />
+          </label>
+        </div>
+
+        <fieldset class="pad-field">
+          <legend>חתימה</legend>
+          <canvas id="pad" width="640" height="180"></canvas>
+          <button type="button" class="text-button" id="clear-pad">נקה חתימה</button>
+        </fieldset>
+
+        <label class="check">
+          <input name="agree" type="checkbox" required />
+          <span>אני בעל/ת הדירה ומאשר/ת את האמור במסמך.</span>
+        </label>
+
+        <p id="form-error" class="form-error" hidden></p>
+        <p id="replace-row" class="replace" hidden>
+          <span>לדירה הזו כבר נשמרה חתימה.</span>
+          <button type="button" class="text-button" id="replace-sign">החלפת החתימה</button>
+        </p>
+
+        <div class="dialog-actions">
+          <button type="submit" class="sign-button" id="submit-sign">שמירת החתימה</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
